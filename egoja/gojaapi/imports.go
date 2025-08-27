@@ -1,10 +1,11 @@
 package gojaapi
 
 import (
+	"github.com/dop251/goja"
 	"github.com/gogf/gf/v2/container/gmap"
 	"github.com/gogf/gf/v2/frame/g"
-	"github.com/dop251/goja"
 	"golang.org/x/sync/singleflight"
+	"strings"
 	"sync"
 )
 
@@ -72,7 +73,22 @@ func RegisterImport(name string, value map[string]any) {
 
 }
 func RegisterFunc(name string, script string) error {
-	localFunc.Set(name, script)
+
+	refresh, s, err := ScriptRefresh(script)
+	if err != nil {
+		return err
+	}
+
+	s = strings.TrimSpace(s)
+	if strings.HasPrefix(s, "const ") {
+		n := strings.SplitN(s, "=", 2)
+		if len(n) == 2 {
+			var v = strings.Replace(n[0], "const ", "", -1)
+			s = "const " + v + " = " + n[1] + "\n" + v
+		}
+	}
+
+	localFunc.Set(name, refresh+"\n"+s)
 	delete(scriptCacheFunc, name)
 	return nil
 }

@@ -1,0 +1,24 @@
+# 统一默认日志配置
+defaultLogger: &defaultLogger
+  Flags: 42
+  rotateBackupCompress: 9                     # 滚动切分文件的压缩比（0-9）。默认为0，表示不压缩
+  level: "all"
+  rotateBackupLimit: 72
+  rotateExpire: "10m"
+  file: "info.log"
+  stdoutColorDisabled: false              # 关闭终端的颜色打印。可选：false|true，默认false
+  writerColorEnable: false
+
+
+
+logger:
+  path: "resource/log/run"
+  file: "{Y-m-d}.log"
+  level: "all"
+  stdout: true
+  <<: *defaultLogger
+
+clearLog:
+  paths:
+    - "E:/build/goframe-ex"
+  day: 30

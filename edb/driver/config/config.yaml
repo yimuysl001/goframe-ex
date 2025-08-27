@@ -1,0 +1,40 @@
+# 统一默认日志配置
+defaultLogger: &defaultLogger
+  Flags: 42
+  rotateBackupCompress: 9                     # 滚动切分文件的压缩比（0-9）。默认为0，表示不压缩
+  level: "all"
+  rotateBackupLimit: 72
+  rotateExpire: "10m"
+  file: "info.log"
+  stdoutColorDisabled: false              # 关闭终端的颜色打印。可选：false|true，默认false
+  writerColorEnable: false
+
+logger:
+  path: "resource/log/run"
+  file: "{Y-m-d}.log"
+  level: "all"
+  stdout: true
+  <<: *defaultLogger
+
+# Database.
+database:
+  logger:
+    level:   "all"
+    stdout:  true
+    Path: "resource/log/sql"
+    <<: *defaultLogger
+
+  default:
+    #link:   "mysql:root:yimuysl@mysql@tcp(117.72.32.132:13371)/mygfast?charset=utf8mb4&parseTime=true&loc=Local"
+    #link:   "pgsql:postgres:123456@tcp(192.168.0.214:5432)/gfast-v32"
+    #link: "dm:GFAST:12345678@tcp(127.0.0.1:5236)/GFASTV32"
+    type: "duckdb"
+    name: "data/duck.db"
+    debug:  true
+    #charset: "utf8mb4" #数据库编码
+    #charset: "utf8" #数据库编码
+    dryRun: false #空跑
+    maxIdle: 10 #连接池最大闲置的连接数
+    maxOpen: 10 #连接池最大打开的连接数
+    maxLifetime: "30s" #(单位秒)连接对象可重复使用的时间长度
+
