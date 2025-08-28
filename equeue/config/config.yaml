@@ -1,0 +1,246 @@
+# 应用名称
+appName: "程序设置"
+
+
+# 统一默认日志配置
+defaultLogger: &defaultLogger
+  level: "all"
+  flags: 42
+  file: "{Y-m-d}.log"                     # 日志文件格式。默认为"{Y-m-d}.log"
+  stdoutColorDisabled: false              # 关闭终端的颜色打印。默认开启
+  writerColorEnable: false                # 日志文件是否带上颜色。默认false，表示不带颜色
+  rotateExpire: "7d"                      # 日志保留天数
+  rotateBackupLimit: 15                    # 最大备份数量
+  rotateBackupCompress: 9                 # 日志文件压缩级别，0-9,9最高
+  rotateCheckInterval:   "1h"
+
+# 日志配置
+logger:
+  # 全局日志：g.Log()
+  path: "logs/logger"                       # 日志文件路径。默认为空，表示关闭，仅输出到终端
+  <<: *defaultLogger
+  # 定时任务：g.Log("cron")
+  trace:
+    path: "logs/trace"                       # 日志文件路径。默认为空，表示关闭，仅输出到终端
+    <<: *defaultLogger
+  cron:
+    path: "logs/cron"                       # 日志文件路径。默认为空，表示关闭，仅输出到终端
+    <<: *defaultLogger
+  # 消息队列：g.Log("cron")
+  queue:
+    path: "logs/queue"                      # 日志文件路径。默认为空，表示关闭，仅输出到终端
+    <<: *defaultLogger
+  # tcp服务器：g.Log("tcpServer")
+  tcpServer:
+    path: "logs/tcpServer"                  # 日志文件路径。默认为空，表示关闭，仅输出到终端
+    <<: *defaultLogger
+  # tcp客户端：g.Log("tcpClient")
+  tcpClient:
+    path: "logs/tcpClient"                  # 日志文件路径。默认为空，表示关闭，仅输出到终端
+    <<: *defaultLogger
+
+
+#消息队列
+equeue:
+#  switch: true                                        # 队列开关，可选：true|false，默认为true
+#  driver: "redis"                                      # 队列驱动，可选：disk|redis|rocketmq|kafka，默认为disk
+#  retry: 2                                            # 重试次数，仅rocketmq支持
+#  groupName: "ptjksj"                                  # mq群组名称
+  #磁盘队列
+  disk:
+    driver: "disk"
+    retry: 2                                            # 重试次数，仅rocketmq支持
+    groupName: "ptjksj"
+    path: "storage/diskqueue"                       # 数据存放路径
+    batchSize: 100                                    # 每100条消息同步一次，batchSize和batchTime满足其一就会同步一次
+    batchTime: 1                                      # 每1秒消息同步一次
+    segmentSize: 10485760                             # 每个topic分片数据文件最大字节，默认10M
+    segmentLimit: 3000                                # 每个topic最大分片数据文件数量，超出部分将会丢弃
+  #redis，默认使用全局redis运行队列
+#  redis:
+#    timeout: 0                                        # 队列超时时间以秒为单位，0表示永不超时。如果队列在设定的超时时间内没有被消费，则会被销毁
+#  rocketmq:
+#    address: "127.0.0.1:9876"                         # broker地址+端口
+#    logLevel: "all"                                   # 系统日志级别，可选：all|close|debug|info|warn|error|fatal
+#  kafka:
+#    address: "127.0.0.1:9092"                         # kafka地址+端口
+#    version: "2.0.0.0"                                # kafka专属配置，默认2.0.0.0
+#    randClient: true                                  # 开启随机生成clientID，可以实现启动多实例同时一起消费相同topic，加速消费能力的特性，默认为true
+#    multiConsumer: true                               # 是否支持创建多个消费者
+
+
+# Redis. 配置参考：https://goframe.org/pages/viewpage.action?pageId=1114217
+redis:
+  default:
+    address: "192.168.200.213:11207"
+    db: "13"
+    pass: "yhqaz@123,./"
+    idleTimeout: "20"
+  db:
+    address: "192.168.200.26:6379"
+    db: "8"
+    pass: "RedisPass123qwe,."
+    idleTimeout: "20"
+  mq:
+    address: "192.168.200.26:6379"
+    db: "9"
+    pass: "RedisPass123qwe,."
+    idleTimeout: "20"
+
+
+
+# Database. 配置参考：https://goframe.org/pages/viewpage.action?pageId=1114245
+database:
+  logger:
+    level: "all"
+    path: "logs/sql"
+    stdout: true
+  default:
+    #link: "mysql:root:123qwe,.@tcp(127.0.0.1:3316)/hotgo?loc=Local&parseTime=true"
+    link: "sqlite::@file(./storage/data/db/db.sqlite3)"
+    extra: "journal_mode=WAL"
+    debug: true
+    Prefix: "hg_"
+  log:
+    #link: "mysql:root:123qwe,.@tcp(127.0.0.1:3316)/hotgo?loc=Local&parseTime=true"
+    link: "sqlite::@file(./storage/data/db/log.sqlite3)"
+    extra: "journal_mode=WAL"
+    debug: true
+    Prefix: "hg_"
+  test:
+    link: "mssql:sa:PTJK123qwe,.26@tcp(192.168.200.26:1433)/yxhis"
+    #link: "sqlite3::@file(./storage/data/db/log.sqlite3)"
+    extra: "journal_mode=WAL"
+    debug: true
+    Prefix: ""
+
+# 链路追踪
+jaeger:
+  switch: false                                   # 链路追踪开关，可选：true|false，默认为false
+  endpoint: "127.0.0.1:6831"                      # jaeger-agent上报地址
+
+
+# 生成代码
+hggen:
+  allowedIPs: ["127.0.0.1", "*"]                                      # 白名单，*代表所有，只有允许的IP后台才能使用生成代码功能
+  selectDbs: [ "default" ]                                            # 可选生成表的数据库配置名称，支持多库
+  disableTables : ["hg_sys_gen_codes","hg_admin_role_casbin"]         # 禁用的表，禁用以后将不会在选择表中看到
+  delimiters: ["@{", "}"]                                             # 模板引擎变量分隔符号
+  # 生成应用模型，所有生成模板允许自定义，可以参考default模板进行改造
+  application:
+    # CRUD模板
+    crud:
+      templates:
+        # 默认的主包模板
+        - group: "default"                                              # 分组名称
+          isAddon: false                                                # 是否为插件模板 false｜true
+          masterPackage: "sys"                                          # 主包名称，需和controllerPath、logicPath、inputPath保持关联
+          templatePath: "./resource/generate/default/curd"              # 模板路径
+          apiPath: "./api/system"                                        # goApi生成路径
+          controllerPath: "./internal/app/system/controller"             # 控制器生成路径
+          logicPath : "./internal/app/system/logic"                            # 主要业务生成路径
+          inputPath: "./internal/app/system/model"                     # 表单过滤器生成路径
+          routerPath : "./internal/app/system/router"                    # 生成路由表路径
+          sqlPath : "./storage/data/generate"                           # 生成sql语句路径
+          webApiPath: "../web/src/api"                                  # webApi生成路径
+          webViewsPath : "../web/src/views"                             # web页面生成路径
+
+        # 默认的插件包模板
+        - group: "addon"                                                # 分组名称
+          isAddon: true                                                 # 是否为插件模板 false｜true
+          masterPackage: "sys"                                          # 主包名称，需和controllerPath、logicPath、inputPath保持关联
+          templatePath: "./resource/generate/default/curd"              # 模板路径
+          apiPath: "./addons/{$name}/api/admin"                         # goApi生成路径
+          controllerPath: "./addons/{$name}/controller/admin/sys"       # 控制器生成路径
+          logicPath : "./addons/{$name}/logic/sys"                      # 主要业务生成路径
+          inputPath: "./addons/{$name}/model/input/sysin"               # 表单过滤器生成路径
+          routerPath : "./addons/{$name}/router/genrouter"              # 生成路由表路径
+          sqlPath : "./storage/data/generate/addons"                    # 生成sql语句路径
+          webApiPath: "../web/src/api/addons/{$name}"                   # webApi生成路径
+          webViewsPath : "../web/src/views/addons/{$name}"              # web页面生成路径
+
+    # 关系树列表模板
+    tree:
+      templates:
+        - group: "default"
+          templatePath: "./resource/generate/default/tree"
+
+    # 消息队列模板
+    queue:
+      templates:
+        - group: "default"
+          templatePath: "./resource/generate/default/queue"
+
+    # 定时任务模板
+    cron:
+      templates:
+        - group: "default"
+          templatePath: "./resource/generate/default/cron"
+
+  # 生成插件模块，通过后台创建新插件时使用的模板，允许自定义，可以参考default模板进行改造
+  addon:
+    srcPath: "./resource/generate/default/addon"                    # 生成模板路径
+    webApiPath: "../web/src/api/addons/{$name}"                     # webApi生成路径
+    webViewsPath: "../web/src/views/addons/{$name}"                 # web页面生成路径
+
+#自定义mq
+MQ:
+  core:
+    NameServer: 192.168.200.26 #     string //ip
+    Port: 5672        #  int    //端口
+    QueueName: TestJCQueue    # string //队列名称
+    ExchangeName: TestJCExchange  #string //交换机名称
+    RoutingKey: TestJCKey    #string //key名称
+    ExchangeType: direct  #string
+    UsernameName: jcpt   #string //用户名
+    PasswordName: 123qwe,. #string //密码
+    AutoReconnect: false #bool   // 未实现
+    AutoTime: 0      #int    //未实现
+    IThread: 1       #int    //消费线程处理数
+  log:
+    NameServer: 192.168.200.26 #     string //ip
+    Port: 5672        #  int    //端口
+    QueueName: LogsJCQueue    # string //队列名称
+    ExchangeName: LogsJCExchange  #string //交换机名称
+    RoutingKey: LogsJCKey    #string //key名称
+    ExchangeType: direct  #string
+    UsernameName: jcpt   #string //用户名
+    PasswordName: 123qwe,. #string //密码
+    AutoReconnect: false #bool   // 未实现
+    AutoTime: 0      #int    //未实现
+    IThread: 1       #int    //消费线程处理数
+
+send:
+  enable: false # 是否启用
+  name: "程序设置" # 是否启用
+  ip: ""  # ip
+  ding:
+    - AccessToken: "8c3082deeb5b4b349a8f257baed7ef755aa795afe509585098fa298a9515732d"  #上面获取的 access_token
+      Secret: "SEC0b7d3ea373a4075580b22f2d16ab42979c24f429ae044e1336c6b371a23ea16c" # 上面获取的加签的值
+
+anko:
+  path: "E:/mydata"
+
+local:
+  skipIp: ""
+
+yanhua:
+  log:
+    send: false
+    appName: "程序名称"
+    operatorName: "操作员名称"
+    orgCode: "医院名称"
+    IP: "程序ip"
+    redisKey: "yanhualog"
+    logKey: ""
+  apollo:
+    meta_addr : "192.168.200.121:8080"
+      #meta_addr : "127.0.0.1:6001"
+    app_id: "TEST-GO"
+    cluster: "DEV"
+      #cache_dir: ""
+      #accesskey_secret: ""
+      #insecure_skip_verify: true
+    namespace_names:
+       - "application"
+       - "config.yaml"
