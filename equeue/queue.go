@@ -3,6 +3,8 @@ package equeue
 import (
 	_ "goframe-ex/equeue/disk"
 	"goframe-ex/equeue/inter"
+	_ "goframe-ex/equeue/nats"
+	_ "goframe-ex/equeue/redis"
 	_ "goframe-ex/equeue/rocket"
 )
 

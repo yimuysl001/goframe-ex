@@ -6,12 +6,11 @@ import (
 	"github.com/gogf/gf/v2/os/gctx"
 	"goframe-ex/equeue/inter"
 	"testing"
-	"time"
 )
 
 func TestConsumer(t *testing.T) {
 
-	Listen("disk").ListenReceiveMsgDo(gctx.New(), "test", func(ctx context.Context, mqMsg inter.MqMsg) error {
+	Listen("nats").ListenReceiveMsgDo(gctx.New(), "test", func(ctx context.Context, mqMsg inter.MqMsg) error {
 		g.Log().Info(ctx, "mqMsg：", string(mqMsg.Body))
 		return nil
 	})
@@ -20,10 +19,10 @@ func TestConsumer(t *testing.T) {
 
 func TestProducer(t *testing.T) {
 	ctx := gctx.New()
-	msg, err := Mq("disk").SendMsg(ctx, "test", "123")
+	msg, err := Mq("nats").SendMsg(ctx, "test", `{"a":"b"}`)
 	if err != nil {
 		g.Log().Error(ctx, "mqMsg err：", err)
 	}
 	g.Log().Info(ctx, "mqMsg：", msg)
-	time.Sleep(2 * time.Hour)
+	//time.Sleep(2 * time.Hour)
 }
