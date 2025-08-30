@@ -78,7 +78,7 @@ func (c *RabbitMQClient) connect() error {
 		if err == nil {
 			break
 		}
-		logger.Logger().Error(gctx.New(), "Failed to connect to %s: %v", host, err)
+		logger.Logger().Error(c.ctx, "Failed to connect to %s: %v", host, err)
 	}
 	// 创建通道
 	c.channel, err = c.connection.Channel()
@@ -91,7 +91,7 @@ func (c *RabbitMQClient) connect() error {
 	go c.monitorConnection()
 
 	c.connected = true
-	logger.Logger().Info(gctx.New(), "Connected to RabbitMQ successfully")
+	logger.Logger().Info(c.ctx, "Connected to RabbitMQ successfully")
 
 	return err
 
@@ -105,7 +105,7 @@ func (c *RabbitMQClient) monitorConnection() {
 	select {
 	case err := <-closeChan:
 		if err != nil {
-			logger.Logger().Error(gctx.New(), "RabbitMQ connection closed: %v", err)
+			logger.Logger().Error(c.ctx, "RabbitMQ connection closed: %v", err)
 		}
 		c.mu.Lock()
 		c.connected = false
@@ -121,7 +121,7 @@ func (c *RabbitMQClient) reconnect() {
 	retryCount := 0
 	for {
 		if c.config.Retry > 0 && retryCount > c.config.Retry {
-			logger.Logger().Error(gctx.New(), "Reconnected failed")
+			logger.Logger().Error(c.ctx, "Reconnected failed")
 			break
 		}
 		time.Sleep(time.Minute)
@@ -131,11 +131,11 @@ func (c *RabbitMQClient) reconnect() {
 
 		err := c.connect()
 		if err == nil {
-			logger.Logger().Info(gctx.New(), "Reconnected to RabbitMQ successfully")
+			logger.Logger().Info(c.ctx, "Reconnected to RabbitMQ successfully")
 			return
 		}
 
-		logger.Logger().Error(gctx.New(), "Reconnection failed: %v", err)
+		logger.Logger().Error(c.ctx, "Reconnection failed: %v", err)
 		retryCount++
 	}
 }

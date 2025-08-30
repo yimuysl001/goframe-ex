@@ -1,6 +1,7 @@
 package equeue
 
 import (
+	_ "goframe-ex/equeue/driver/bus"
 	_ "goframe-ex/equeue/driver/disk"
 	_ "goframe-ex/equeue/driver/kafka"
 	_ "goframe-ex/equeue/driver/nats"

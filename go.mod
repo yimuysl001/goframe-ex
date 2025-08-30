@@ -7,6 +7,7 @@ require (
 	github.com/IBM/sarama v1.46.0
 	github.com/Masterminds/sprig/v3 v3.3.0
 	github.com/apache/rocketmq-client-go/v2 v2.1.2
+	github.com/asaskevich/EventBus v0.0.0-20200907212545-49d423059eef
 	github.com/beevik/etree v1.5.1
 	github.com/clbanning/mxj/v2 v2.7.0
 	github.com/deatil/go-cryptobin v1.1.1006
