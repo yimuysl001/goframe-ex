@@ -2,10 +2,11 @@ package redis
 
 import (
 	"context"
+	"errors"
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
+	"goframe-ex/equeue/driver/logger"
 	"goframe-ex/equeue/inter"
-	"goframe-ex/equeue/logger"
 	"strconv"
 	"time"
 )
@@ -23,6 +24,12 @@ func (r *RedisMq) ListenReceiveMsgDo(ctx context.Context, topic string, receiveD
 	if topic == "" {
 		return gerror.New("RedisMq topic is empty")
 	}
+
+	_, ok := r.flag[topic]
+	if ok {
+		return errors.New(topic + " is started ")
+	}
+
 	r.flag[topic] = false
 	var (
 		key  = r.genKey(r.groupName, topic)

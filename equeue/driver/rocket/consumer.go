@@ -5,8 +5,8 @@ import (
 	"github.com/apache/rocketmq-client-go/v2/consumer"
 	"github.com/apache/rocketmq-client-go/v2/primitive"
 	"github.com/gogf/gf/v2/errors/gerror"
+	"goframe-ex/equeue/driver/logger"
 	"goframe-ex/equeue/inter"
-	"goframe-ex/equeue/logger"
 )
 
 // ListenReceiveMsgDo 消费数据

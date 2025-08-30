@@ -5,8 +5,8 @@ import (
 	"github.com/gogf/gf/v2/encoding/gjson"
 	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/gogf/gf/v2/os/gfile"
+	"goframe-ex/equeue/driver/logger"
 	"goframe-ex/equeue/inter"
-	"goframe-ex/equeue/logger"
 	"sync"
 	"time"
 )
@@ -19,8 +19,8 @@ type DiskProducerMq struct {
 
 type DiskConsumerMq struct {
 	config inter.MqConfig
-	queue  *Queue
-	flag   bool
+	queue  map[string]*Queue
+	flag   map[string]bool
 }
 
 func NewDiskQueue(topic string, config inter.MqConfig) *Queue {

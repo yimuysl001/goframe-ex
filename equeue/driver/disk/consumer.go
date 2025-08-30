@@ -4,14 +4,16 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/gogf/gf/v2/errors/gerror"
+	"goframe-ex/equeue/driver/logger"
 	"goframe-ex/equeue/inter"
-	"goframe-ex/equeue/logger"
 	"time"
 )
 
 func RegisterDiskMqConsumer(config inter.MqConfig) (client inter.MqConsumer, err error) {
 	return &DiskConsumerMq{
 		config: config,
+		flag:   make(map[string]bool),
+		queue:  make(map[string]*Queue),
 	}, nil
 }
 
@@ -20,18 +22,22 @@ func (q *DiskConsumerMq) ListenReceiveMsgDo(ctx context.Context, topic string, r
 	if topic == "" {
 		return gerror.New("disk.ListenReceiveMsgDo topic is empty")
 	}
-	q.queue = NewDiskQueue(topic, q.config)
-	q.flag = true
+	if q.flag[topic] == true {
+		return gerror.New("disk.ListenReceiveMsgDo topic already in use")
+	}
+	var queue = NewDiskQueue(topic, q.config)
+	q.queue[topic] = queue
+	q.flag[topic] = true
 	var (
 		sleep = time.Second
 	)
 
 	for {
-		if q.flag == false {
+		if q.flag[topic] == false {
 			break
 		}
 
-		if index, offset, data, err := q.queue.Read(); err == nil {
+		if index, offset, data, err := queue.Read(); err == nil {
 			var mqMsg inter.MqMsg
 			if err = json.Unmarshal(data, &mqMsg); err != nil {
 				logger.Logger().Warningf(ctx, "disk.ListenReceiveMsgDo Unmarshal err:%+v, topic：%v, data:%+v .", err, topic, string(data))
@@ -41,7 +47,7 @@ func (q *DiskConsumerMq) ListenReceiveMsgDo(ctx context.Context, topic string, r
 				if err = receiveDo(ctx, mqMsg); err != nil {
 					logger.Logger().Error(ctx, "disk.ListenReceiveMsgDo receiveDo err:%+v", err)
 				}
-				q.queue.Commit(index, offset)
+				queue.Commit(index, offset)
 				sleep = time.Millisecond * 10
 			}
 		} else {
@@ -54,10 +60,10 @@ func (q *DiskConsumerMq) ListenReceiveMsgDo(ctx context.Context, topic string, r
 }
 
 func (q *DiskConsumerMq) Unsubscribe(ctx context.Context, topic string) (err error) {
-	q.flag = false
+	q.flag[topic] = false
 
-	if q.queue == nil {
-		q.queue.Close()
+	if q.queue[topic] == nil {
+		q.queue[topic].Close()
 	}
 	return err
 

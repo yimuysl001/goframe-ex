@@ -2,7 +2,7 @@ package rocket
 
 import (
 	"github.com/gogf/gf/v2/os/gctx"
-	"goframe-ex/equeue/logger"
+	"goframe-ex/equeue/driver/logger"
 )
 
 var ctx = gctx.GetInitCtx()

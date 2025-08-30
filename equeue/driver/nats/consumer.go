@@ -2,6 +2,7 @@ package nats
 
 import (
 	"context"
+	"errors"
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/nats-io/nats.go"
 	"goframe-ex/equeue/inter"
@@ -22,7 +23,14 @@ func (r *NatsMq) ListenReceiveMsgDo(ctx context.Context, topic string, receiveDo
 	if topic == "" {
 		return gerror.New("RedisMq topic is empty")
 	}
+
+	_, ok := r.cancelMap[topic]
+	if ok {
+		return errors.New(topic + " is started ")
+	}
+
 	newCtx, cancel := context.WithCancel(ctx)
+
 	r.cancelMap[topic] = cancel
 
 	sub, err := r.js.PullSubscribe(r.subjects+"."+topic, r.subjects, nats.Context(newCtx), nats.PullMaxWaiting(r.maxWaiting))
