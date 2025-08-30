@@ -26,6 +26,7 @@ require (
 	github.com/marcboeker/go-duckdb/v2 v2.3.5
 	github.com/nats-io/nats.go v1.45.0
 	github.com/oklog/ulid/v2 v2.1.1
+	github.com/rabbitmq/amqp091-go v1.10.0
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/sony/sonyflake v1.3.0
 	github.com/syndtr/goleveldb v1.0.0

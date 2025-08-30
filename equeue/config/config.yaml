@@ -73,6 +73,18 @@ equeue:
     password: "PTJK123qwe,.26"
     groupName: "TESTDATA"
     name: "etest"
+  rabbit:
+    driver: "rabbit"
+    address:
+      - "192.168.200.26:5672"
+    userName: "jcpt"
+    password: "123qwe,."
+    queue: "TestEXQueue"
+    exchange: "TestEXExchange"
+    key: "TestEXKey"
+    kind: "direct"
+
+
   #redis，默认使用全局redis运行队列
 #  redis:
 #    timeout: 0                                        # 队列超时时间以秒为单位，0表示永不超时。如果队列在设定的超时时间内没有被消费，则会被销毁

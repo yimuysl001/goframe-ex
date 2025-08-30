@@ -27,4 +27,8 @@ type MqConfig struct {
 	UserName      string        `json:"userName"`
 	Password      string        `json:"password"`
 	Token         string        `json:"token"`
+	Queue         string        `json:"queue"`
+	Exchange      string        `json:"exchange"`
+	Key           string        `json:"key"`
+	Kind          string        `json:"kind"`
 }

@@ -2,10 +2,12 @@ package equeue
 
 import (
 	_ "goframe-ex/equeue/driver/disk"
-	"goframe-ex/equeue/inter"
+	_ "goframe-ex/equeue/driver/kafka"
 	_ "goframe-ex/equeue/driver/nats"
+	_ "goframe-ex/equeue/driver/rabbit"
 	_ "goframe-ex/equeue/driver/redis"
 	_ "goframe-ex/equeue/driver/rocket"
+	"goframe-ex/equeue/inter"
 )
 
 func Listen(name ...string) inter.MqConsumer {
