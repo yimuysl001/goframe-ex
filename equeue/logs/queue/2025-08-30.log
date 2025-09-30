@@ -1,0 +1,18 @@
+2025-08-30T15:32:59.020+08:00 [INFO] {d0139aa7137b6018b0f2f06584378e0e} E:/build/github/goframe-ex/equeue/driver/rabbit/rabbit.go:94: Connected to RabbitMQ successfully
+2025-08-30T15:33:24.669+08:00 [INFO] {a87557a0197b6018406c102cc86a3f27} E:/build/github/goframe-ex/equeue/driver/rabbit/rabbit.go:94: Connected to RabbitMQ successfully
+2025-08-30T15:33:24.675+08:00 [ERRO] {ec1e97a0197b6018416c102ca1243298} E:/build/github/goframe-ex/equeue/driver/rabbit/cousumer.go:67:  
+Stack:
+1.  goframe-ex/equeue/driver/rabbit.(*RabbitMQClient).ListenReceiveMsgDo
+    E:/build/github/goframe-ex/equeue/driver/rabbit/cousumer.go:67
+2.  goframe-ex/equeue.TestConsumer
+    E:/build/github/goframe-ex/equeue/queue_test.go:13
+
+2025-08-30T15:33:55.711+08:00 [INFO] {685891da207b6018faddea7140fcdae8} E:/build/github/goframe-ex/equeue/driver/rabbit/rabbit.go:94: Connected to RabbitMQ successfully
+2025-08-30T15:34:26.460+08:00 [INFO] {905b5e03287b6018b81fe4338a6306b6} E:/build/github/goframe-ex/equeue/driver/rabbit/rabbit.go:94: Connected to RabbitMQ successfully
+2025-08-30T15:34:37.910+08:00 [INFO] {f820e3ad2a7b601819a89a206f077146} E:/build/github/goframe-ex/equeue/driver/rabbit/rabbit.go:94: Connected to RabbitMQ successfully
+2025-08-30T15:34:58.055+08:00 [INFO] {985e9b5e2f7b601866a55d3053831c03} E:/build/github/goframe-ex/equeue/driver/rabbit/rabbit.go:94: Connected to RabbitMQ successfully
+2025-08-30T15:39:43.339+08:00 [INFO] {a843d9ca717b6018fb9fc317cb8c0a60} E:/build/github/goframe-ex/equeue/driver/rabbit/rabbit.go:94: Connected to RabbitMQ successfully
+2025-08-30T15:39:52.337+08:00 [INFO] {70c72ce3737b6018240759703fc915fa} E:/build/github/goframe-ex/equeue/driver/rabbit/rabbit.go:94: Connected to RabbitMQ successfully
+2025-08-30T15:40:01.651+08:00 [INFO] {fc875d0e767b6018ff75dd4047571955} E:/build/github/goframe-ex/equeue/driver/rabbit/rabbit.go:94: Connected to RabbitMQ successfully
+2025-08-30T15:47:02.425+08:00 [INFO] {70e87406d87b601872800e663f3f93e9} E:/build/github/goframe-ex/equeue/driver/rabbit/rabbit.go:94: Connected to RabbitMQ successfully
+2025-08-30T15:47:14.921+08:00 [INFO] {88c138efda7b60187e9da972db320066} E:/build/github/goframe-ex/equeue/driver/rabbit/rabbit.go:94: Connected to RabbitMQ successfully

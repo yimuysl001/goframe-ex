@@ -1,0 +1,100 @@
+
+
+
+# 统一默认日志配置
+defaultLogger: &defaultLogger
+  Flags: 42
+  rotateBackupCompress: 9                     # 滚动切分文件的压缩比（0-9）。默认为0，表示不压缩
+  level: "all"
+  rotateBackupLimit: 72
+  rotateExpire: "10m"
+  file: "info.log"
+  stdoutColorDisabled: false              # 关闭终端的颜色打印。可选：false|true，默认false
+  writerColorEnable: false
+
+
+server:
+  address: ":8000"                            # 本地监听地址。默认":8000"，多个地址以","号分隔。例如："192.168.2.3:8000,10.0.3.10:8001"
+  ErrorLogEnabled: true                       # 是否记录异常日志信息到日志中。默认为true
+  errorLogPattern: "error/{Y-m-d}.log"        # 异常错误日志文件格式。默认为"error-{Ymd}.log"
+  accessLogEnabled: true                      # 是否记录访问日志。默认为false
+  accessLogPattern: "access/{Y-m-d}.log"      # 访问日志文件格式。默认为"access-{Ymd}.log"
+  maxHeaderBytes: "100KB"                     # 请求头大小限制，请求头包括客户端提交的Cookie数据，默认设置为100KB
+  clientMaxBodySize: "200MB"                  # 客户端提交的Body大小限制，同时也影响文件上传大小，默认设置为200MB
+  serverAgent: "HG HTTP Server"               # 服务端Agent信息。默认为"HG HTTP Server"
+  # PProf配置
+  pprofEnabled: true                          # 是否开启PProf性能调试特性。默认为false
+  pprofPattern: "/pprof"                      # 开启PProf时有效，表示PProf特性的页面访问路径，对当前Server绑定的所有域名有效。
+  # 服务日志配置
+  logger:
+    level: "all"
+    flags: 42
+    rotateExpire: "7d"                      # 日志保留天数
+    rotateBackupLimit: 2                    # 最大备份数量
+    rotateBackupCompress: 2                 # 日志文件压缩级别，0-9,9最高
+    <<: *defaultLogger
+
+
+logger:
+  path: "resource/log/run"
+  file: "{Y-m-d}.log"
+  level: "all"
+  stdout: true
+  <<: *defaultLogger
+
+# Database.
+database:
+  logger:
+    level:   "all"
+    stdout:  true
+    Path: "resource/log/sql"
+    <<: *defaultLogger
+
+#  default:
+#    #link:   "mysql:root:yimuysl@mysql@tcp(117.72.32.132:13371)/mygfast?charset=utf8mb4&parseTime=true&loc=Local"
+#    #link:   "pgsql:postgres:123456@tcp(192.168.0.214:5432)/gfast-v32"
+#    #link: "dm:GFAST:12345678@tcp(127.0.0.1:5236)/GFASTV32"
+#    type: "duckdb"
+#    name: "data/duck.db"
+#    debug:  true
+#    #charset: "utf8mb4" #数据库编码
+#    #charset: "utf8" #数据库编码
+#    dryRun: false #空跑
+#    maxIdle: 10 #连接池最大闲置的连接数
+#    maxOpen: 10 #连接池最大打开的连接数
+#    maxLifetime: "30s" #(单位秒)连接对象可重复使用的时间长度
+#
+  default:
+    #link:   "mysql:root:yimuysl@mysql@tcp(117.72.32.132:13371)/mygfast?charset=utf8mb4&parseTime=true&loc=Local"
+    #link:   "pgsql:postgres:123456@tcp(192.168.0.214:5432)/gfast-v32"
+    #link: "dm:GFAST:12345678@tcp(127.0.0.1:5236)/GFASTV32"
+    type: "mssql"
+    name: "yxhis"
+    debug:  true
+    port: 1433
+    host: 192.168.200.26
+    user: sa
+    pass: PTJK123qwe,.26
+    #charset: "utf8mb4" #数据库编码
+    #charset: "utf8" #数据库编码
+    dryRun: false #空跑
+    maxIdle: 10 #连接池最大闲置的连接数
+    maxOpen: 10 #连接池最大打开的连接数
+    maxLifetime: "30s" #(单位秒)连接对象可重复使用的时间长度
+  BS:
+    #link:   "mysql:root:yimuysl@mysql@tcp(117.72.32.132:13371)/mygfast?charset=utf8mb4&parseTime=true&loc=Local"
+    #link:   "pgsql:postgres:123456@tcp(192.168.0.214:5432)/gfast-v32"
+    #link: "dm:GFAST:12345678@tcp(127.0.0.1:5236)/GFASTV32"
+    type: "mssql"
+    name: "his"
+    debug:  true
+    port: 1433
+    host: 192.168.232.61
+    user: sa
+    pass: Fcf7aD2w7PK6fr0q4967
+    #charset: "utf8mb4" #数据库编码
+    #charset: "utf8" #数据库编码
+    dryRun: false #空跑
+    maxIdle: 10 #连接池最大闲置的连接数
+    maxOpen: 10 #连接池最大打开的连接数
+    maxLifetime: "30s" #(单位秒)连接对象可重复使用的时间长度
